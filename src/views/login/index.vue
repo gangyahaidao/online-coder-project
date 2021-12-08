@@ -3,17 +3,18 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">iCode题库</h3>
       </div>
 
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
+        <!-- 添加ref属性，后面可以用this.$refs.username获取此输入框对象，进而调用属性和相关方法 -->
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -21,7 +22,7 @@
         />
       </el-form-item>
 
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+      <el-tooltip v-model="capsTooltip" content="大写已打开" placement="right" manual>
         <el-form-item prop="password">
           <span class="svg-container">
             <svg-icon icon-class="password" />
@@ -45,52 +46,52 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-checkbox v-model="loginForm.remember" style="margin-bottom: 20px; margin-left: 5px">记住密码</el-checkbox>
+
+      <!--登录按钮-->
+      <!--不是原生标签点击需要添加.native修饰，避免点击失效；.prevent提交事件不会重载页面-->
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin"
+      >登录</el-button>
 
       <div style="position:relative">
         <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
+          <span>管理员用户: admin</span>
+          <span>密码: 111111</span>
         </div>
         <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
+          <span style="margin-right:18px;">学生用户: student</span>
+          <span>密码: 111111</span>
         </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
       </div>
     </el-form>
 
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
+    <div class="foot-copyright">
+      <span>Copyright © 2021 湖南软件职业技术大学 讯飞人工智能学院 版权所有</span>
+    </div>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-import SocialSign from './components/SocialSignin'
+import { validUsername } from '@/utils/validate' // 导入校验用户名函数
 
 export default {
   name: 'Login',
-  components: { SocialSign },
+  components: { },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+      if (!validUsername(value)) { // 判断名字是否是admin或者student
+        callback(new Error('请输入正确的用户名')) // 在输入框下方进行错误提示
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码位数不能少于6位'))
       } else {
         callback()
       }
@@ -98,24 +99,24 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: '111111',
+        remember: false
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      loginRules: { // 输入校验规则
+        username: [{ required: true, type: 'string', message: '请输入用户名', trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, type: 'string', message: '请输入密码', trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
       capsTooltip: false,
-      loading: false,
-      showDialog: false,
+      loading: false, // 点击登录按钮上显示的转圈圈
       redirect: undefined,
       otherQuery: {}
     }
   },
   watch: {
-    $route: {
-      handler: function(route) {
-        const query = route.query
+    $route: { // 监听路由变化
+      handler: function(route) { // 有两个参数：oldValue, newValue，相当于路由中的to和from的概念
+        const query = route.query // 获取页面跳转参数
         if (query) {
           this.redirect = query.redirect
           this.otherQuery = this.getOtherQuery(query)
@@ -138,10 +139,6 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
-    checkCapslock(e) {
-      const { key } = e
-      this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
-    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -153,11 +150,13 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
+      this.$refs.loginForm.validate(valid => { // 调用输入框的验证方法
+        if (valid) { // 验证通过
           this.loading = true
+          // user/login是调用store/modules/user.js中的全局login函数 -> api/user.js/login函数
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
+              // 页面跳转到path，携带get类型参数query；也可以使用name+params发起post方式的请求
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
@@ -178,24 +177,6 @@ export default {
         return acc
       }, {})
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>
@@ -252,6 +233,22 @@ $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
+.foot-copyright {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+
+  span {
+    line-height: 20px;
+    text-align: center;
+    color: #666;
+    margin: 0px 5px;
+    font-size: 14px;
+  }
+}
+
 .login-container {
   min-height: 100%;
   width: 100%;
@@ -262,9 +259,10 @@ $light_gray:#eee;
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+    padding: 30px 50px 10px 50px;
+    margin: 120px auto auto auto;
     overflow: hidden;
+    background: rgba(252, 254, 255, 0.11);
   }
 
   .tips {

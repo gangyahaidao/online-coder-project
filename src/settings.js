@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: 'iCode学习平台',
 
   /**
    * @type {boolean} true | false

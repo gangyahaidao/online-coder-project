@@ -17,9 +17,10 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
   return modules
 }, {})
 
+// 全局状态存储
 const store = new Vuex.Store({
-  modules,
-  getters
+  modules, // 使用this.$store.dispatch('name', params)异步进行调用,this.$store.commit()同步,全局set作用
+  getters // this.$store.state.xxx.xxx
 })
 
 export default store

@@ -18,6 +18,7 @@ export default {
     }
   },
   computed: {
+    // 此处如果不使用map辅助函数，等价于roles:()=>this.$store.getters.roles
     ...mapGetters([
       'roles'
     ])

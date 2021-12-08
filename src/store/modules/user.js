@@ -29,7 +29,7 @@ const mutations = {
 }
 
 const actions = {
-  // user login
+  // user login 用户名密码登录，
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {

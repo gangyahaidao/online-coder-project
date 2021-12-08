@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-/* Layout */
+/* Layout 导入布局文件 */
 import Layout from '@/layout'
 
 /* Router Modules */
@@ -20,7 +20,7 @@ import nestedRouter from './modules/nested'
  * alwaysShow: true               if set true, will always show the root menu
  *                                if not set alwaysShow, when item has more than one children route,
  *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
+ * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb 该路由在面包屑导航中不可被点击
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
     roles: ['admin','editor']    control the page roles (you can set multiple roles)
@@ -34,7 +34,7 @@ import nestedRouter from './modules/nested'
  */
 
 /**
- * constantRoutes
+ * constantRoutes 静态路由，不需要权限
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
