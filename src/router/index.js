@@ -79,10 +79,165 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '主页', icon: 'home', affix: true }
       }
     ]
   },
+  {
+    path: '/user',
+    component: Layout,
+    name: 'UserPage',
+    meta: {
+      title: '用户管理',
+      icon: 'users'
+    },
+    children: [
+      {
+        path: 'student/list',
+        component: () => import('@/views/user/student/list'),
+        name: 'UserStudentPageList',
+        meta: { title: '学生列表', noCache: true }
+      },
+      {
+        path: 'student/edit',
+        component: () => import('@/views/user/student/edit'),
+        name: 'UserStudentEdit',
+        meta: { title: '学生编辑', noCache: true, activeMenu: 'user/student/list' },
+        hidden: true
+      },
+      {
+        path: 'admin/list',
+        component: () => import('@/views/user/admin/list'),
+        name: 'UserAdminPageList',
+        meta: { title: '管理员列表', noCache: true }
+      },
+      {
+        path: 'admin/edit',
+        component: () => import('@/views/user/admin/edit'),
+        name: 'UserAdminEdit',
+        meta: { title: '管理员编辑', noCache: true, activeMenu: '/user/admin/list' },
+        hidden: true
+      }
+    ]
+  },
+  // {
+  //   path: '/classroom',
+  //   component: Layout,
+  //   name: 'ClassroomPage',
+  //   meta: {
+  //     title: '班级管理',
+  //     icon: 'tree'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'classroom/list',
+  //       component: () => import('@/views/classroom/list'),
+  //       name: 'ClassroomList',
+  //       meta: { title: '班级列表', noCache: true }
+  //     },
+  //     {
+  //       path: 'classroom/edit',
+  //       component: () => import('@/views/classroom/edit'),
+  //       name: 'ClassroomList',
+  //       meta: { title: '班级创建', noCache: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/paper',
+  //   component: Layout,
+  //   name: 'PaperManage',
+  //   meta: {
+  //     title: '试卷管理',
+  //     icon: 'documentation'
+  //   },
+  //   alwaysShow: true,
+  //   children: [
+  //     {
+  //       path: 'paper/list',
+  //       component: () => import('@/views/paper/list'),
+  //       name: 'PaperList',
+  //       meta: { title: '试卷列表', noCache: true }
+  //     },
+  //     {
+  //       path: 'paper/edit',
+  //       component: () => import('@/views/paper/edit'),
+  //       name: 'PaperEdit',
+  //       meta: { title: '试卷创建', noCache: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/exam',
+  //   component: Layout,
+  //   name: 'ExamManage',
+  //   meta: {
+  //     title: '答卷批阅',
+  //     icon: 'edit'
+  //   },
+  //   alwaysShow: true,
+  //   children: [
+  //     {
+  //       path: 'exam/list',
+  //       component: () => import('@/views/exam/list'),
+  //       name: 'ExamList',
+  //       meta: { title: '批卷列表', noCache: true }
+  //     },
+  //     {
+  //       path: 'exam/done',
+  //       component: () => import('@/views/exam/done'),
+  //       name: 'ExamDone',
+  //       meta: { title: '批阅完成', noCache: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: 'exambank',
+  //   component: Layout,
+  //   name: 'ExambankPage',
+  //   meta: {
+  //     title: '题库管理',
+  //     icon: 'exam'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/exambank/list'),
+  //       name: 'ExambankList',
+  //       meta: { title: '题库列表', noCache: true }
+  //     },
+  //     {
+  //       path: 'edit/singleChoice',
+  //       component: () => import('@/views/exambank/edit/singleChoice'),
+  //       name: 'SingleChoice',
+  //       meta: { title: '单选题创编', noCache: true, activeMenu: '/exambank/list' }
+  //     },
+  //     {
+  //       path: 'edit/multipleChoice',
+  //       component: () => import('@/views/exambank/edit/multipleChoice'),
+  //       name: 'MultipleChoice',
+  //       meta: { title: '多选题创编', noCache: true, activeMenu: '/exambank/list' }
+  //     },
+  //     {
+  //       path: 'edit/trueFalse',
+  //       component: () => import('@/views/exambank/edit/trueFalse'),
+  //       name: 'TrueFalse',
+  //       meta: { title: '判断题创编', noCache: true, activeMenu: '/exambank/list' }
+  //     },
+  //     {
+  //       path: 'edit/gapFilling',
+  //       component: () => import('@/views/exambank/edit/gapFilling'),
+  //       name: 'GapFilling',
+  //       meta: { title: '填空题创编', noCache: true, activeMenu: '/exambank/list' }
+  //     },
+  //     {
+  //       path: 'edit/shortAnswer',
+  //       component: () => import('@/views/exambank/edit/shortAnswer'),
+  //       name: 'ShortAnswer',
+  //       meta: { title: '简答题创编', noCache: true, activeMenu: '/exambank/list' }
+  //     }
+  //   ]
+  // },
   {
     path: '/documentation',
     component: Layout,
