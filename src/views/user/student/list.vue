@@ -10,9 +10,9 @@ export default {
   data() {
     return {
       queryParam: {
-        userName: '',
-        schoolName: '',
-        className: ''
+        userName: '', // 用户名
+        schoolName: '', // 学校名
+        className: '' // 班级名
       }
     }
   }
